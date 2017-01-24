@@ -8,7 +8,7 @@
 
 var path = require('path');
 var Writable = require('stream').Writable;
-// var concat = require('concat-stream');
+var concat = require('concat-stream');
 var azure = require( 'azure-storage');
 var _ = require( 'lodash' );
 var mime = require( 'mime' );
@@ -24,18 +24,21 @@ module.exports = function SkipperAzure( globalOptions ) {
     read: function( fd, cb ) {
       var prefix = fd;
 
-      var res = blobService.createReadStream( globalOptions.container, prefix, function( err ) {
-        if ( err ) {
-          cb( err );
-        }
-        else {
-          cb(null, res);
-        }
-      });
+      if(cb) {
+        var res = blobService.createReadStream( globalOptions.container, prefix, function( err ) {
+          if ( err ) {
+            cb( err );
+          }
+        });
 
-      /*res.pipe(concat(function (data) {
-        return cb(null, data);
-      }));*/
+        res.pipe(concat(function (data) {
+          return cb(null, data);
+        }));
+      }
+      else {
+        return blobService.createReadStream( globalOptions.container, prefix, function( err ) {
+        });
+      }
     },
 
     rm: function( fd, cb ) {
