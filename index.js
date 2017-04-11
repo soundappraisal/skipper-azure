@@ -21,25 +21,31 @@ module.exports = function SkipperAzure( globalOptions ) {
 
   var adapter = {
 
-    read: function( fd, cb ) {
-      var prefix = fd;
+      read: function( fd, cb ) {
+          var prefix = fd;
+          var res;
 
-      if(cb) {
-        var res = blobService.createReadStream( globalOptions.container, prefix, function( err ) {
-          if ( err ) {
-            cb( err );
-          }
-        });
+          blobService.doesContainerExist( globalOptions.container, prefix, function( err, result ) {
+              if ( err ) return cb( err );
+              if(result){
+                  response(result);
+              }else{
+                  blobService.createContainer( globalOptions.container, prefix, function( err, result ) {
+                      if ( err ) return cb( err );
+                      response(result);
+                  });
+              }
 
-        res.pipe(concat(function (data) {
-          return cb(null, data);
-        }));
-      }
-      else {
-        return blobService.createReadStream( globalOptions.container, prefix, function( err ) {
-        });
-      }
-    },
+              function response(result){
+                  var res = blobService.createReadStream( globalOptions.container, prefix, function( err ) {
+                      if ( err ) return cb( err );
+                      res.pipe(concat(function (data) {
+                          return cb(null, data);
+                      }));
+                  });
+              }
+          });
+      },
 
     rm: function( fd, cb ) {
       blobService.deleteBlobIfExists( globalOptions.container, fd, function( err, result, response ){
