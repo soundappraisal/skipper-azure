@@ -26,19 +26,25 @@ module.exports = function SkipperAzure( globalOptions ) {
           var res;
 
           blobService.doesContainerExist( globalOptions.container, prefix, function( err, result ) {
+              console.log("doesContainerExist", err);
               if ( err ) return cb( err );
               if(result){
+                  console.log("doesContainerExist:result", result);
                   response(result);
               }else{
                   blobService.createContainer( globalOptions.container, prefix, function( err, result ) {
+                      console.log("createContainer", err);
                       if ( err ) return cb( err );
+                      console.log("createContainer:result", result);
                       response(result);
                   });
               }
 
               function response(result){
                   var res = blobService.createReadStream( globalOptions.container, prefix, function( err ) {
+                      console.log("createContainer", err);
                       if ( err ) return cb( err );
+                      console.log("res.pipe");
                       res.pipe(concat(function (data) {
                           return cb(null, data);
                       }));
