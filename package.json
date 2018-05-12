@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/lukasreichart/skipper-azure",
   "devDependencies": {
-    "skipper-adapter-tests": "^1.5.3"
+    "skipper-adapter-tests": "~1.5.8"
   },
   "dependencies": {
-    "azure-storage": "^0.4.2",
-    "concat-stream": "^1.4.7",
-    "lodash": "~2.4.1",
-    "mime": "^1.3.4"
+    "azure-storage": "^2.8.2",
+    "concat-stream": "^1.6.2",
+    "lodash": "^4.17.10",
+    "mime": "^2.3.1"
   }
 }
