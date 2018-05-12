@@ -3,10 +3,9 @@
  * Author: Lukas Reichart on 3/9/15.
  * Purpose: Skipper adapter ( used by the sails.js framework )
  * License: MIT
- * Copyright Lukas Reichart @Antum 2015
+ * Copyright Lukas Reichart @Antum 2015, Arryon Tijsma 
  */
 
-var streamSpy = require('stream_spy');
 var path = require('path');
 var Writable = require('stream').Writable;
 var concat = require('concat-stream');
